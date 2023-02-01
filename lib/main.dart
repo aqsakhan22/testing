@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -7,6 +9,7 @@ import 'package:testing/SpotifyProvider.dart';
 import 'package:testing/UserPreferences.dart';
 import 'package:testing/provider_utility.dart';
 import 'package:testing/spotify_Ex.dart';
+import 'package:uni_links/uni_links.dart';
 //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
 
 Future<void> main() async {
@@ -30,14 +33,25 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  StreamSubscription? sub;
+  Uri? _initialUri;
+  Uri? _latestUri;
+  Object? _err;
 
   @override
   void initState() {
     // TODO: implement initState
-  //  _handleIncomingLinks();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _handleIncomingLinks();
+    });
+
     super.initState();
   }
+  void _handleIncomingLinks() {
+    print("_handleIncomingLinks");
+    // spotifyProvider.initSpotify();
 
+  }
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -75,11 +89,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Hom e"),
+        title: Text("Home"),
       ),
       body: Container(
         child: Column(
@@ -94,6 +109,13 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+
+
+
+
+
+
 
 
 

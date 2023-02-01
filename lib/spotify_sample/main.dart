@@ -1,28 +1,39 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
-import 'package:provider/provider.dart';
 import 'package:spotify_sdk/models/connection_status.dart';
 import 'package:spotify_sdk/models/crossfade_state.dart';
 import 'package:spotify_sdk/models/image_uri.dart';
 import 'package:spotify_sdk/models/player_context.dart';
 import 'package:spotify_sdk/models/player_state.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
-import 'package:testing/SpotifyProvider.dart';
-import 'package:testing/provider_utility.dart';
+import 'package:testing/spotify_sample/SizedIconButton.dart';
 
-class Spotify extends StatefulWidget {
-  const Spotify({Key? key}) : super(key: key);
 
-  @override
-  _SpotifyState createState() => _SpotifyState();
+
+Future<void> main() async {
+  // await dotenv.load(fileName: '.env');
+  runApp(const Home());
 }
 
-class _SpotifyState extends State<Spotify> {
+/// A [StatefulWidget] which uses:
+/// * [spotify_sdk](https://pub.dev/packages/spotify_sdk)
+/// to connect to Spotify and use controls.
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   bool _loading = false;
   bool _connected = false;
+  String callBackUrlSpotify = 'spotify-ios-quick-start://spotify-login-callback';
   final Logger _logger = Logger(
     //filter: CustomLogFilter(), // custom logfilter can be used to have logs in release mode
     printer: PrettyPrinter(
@@ -34,38 +45,16 @@ class _SpotifyState extends State<Spotify> {
       printTime: true,
     ),
   );
-  String clientId="";
-  String RedirectUrl="";
 
   CrossfadeState? crossfadeState;
   late ImageUri? currentTrackImageUri;
 
-  late SpotifyProvider spotifyProvider;
-  void _handleIncomingLinks() {
-    print("_handleIncomingLinks");
-    spotifyProvider.initSpotify();
-   //  getAccessToken();
-    //  }
-  }
-  @override
-  void initState() {
-    // TODO: implement initState
- WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-   _handleIncomingLinks();
- });
-
-
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
-    spotifyProvider=Provider.of<SpotifyProvider>(context);
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       home: StreamBuilder<ConnectionStatus>(
         stream: SpotifySdk.subscribeConnectionStatus(),
         builder: (context, snapshot) {
-          print("Snapshot is ${snapshot}");
           _connected = false;
           var data = snapshot.data;
           if (data != null) {
@@ -73,12 +62,12 @@ class _SpotifyState extends State<Spotify> {
           }
           return Scaffold(
             appBar: AppBar(
-              title: const Text(''),
+              title: const Text('SpotifySdk Examplewww'),
               actions: [
                 _connected
                     ? IconButton(
                   onPressed: disconnect,
-                  icon: const Icon(Icons.exit_to_app,color: Colors.black,),
+                  icon: const Icon(Icons.exit_to_app),
                 )
                     : Container()
               ],
@@ -99,29 +88,29 @@ class _SpotifyState extends State<Spotify> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              IconButton(
-                // width: 50,
-                icon: Icon(Icons.queue_music),
+              SizedIconButton(
+                width: 50,
+                icon: Icons.queue_music,
                 onPressed: queue,
               ),
-              IconButton(
-                //  width: 50,
-                icon: Icon(Icons.playlist_play),
+              SizedIconButton(
+                width: 50,
+                icon: Icons.playlist_play,
                 onPressed: play,
               ),
-              IconButton(
-                // width: 50,
-                icon: Icon(Icons.repeat),
+              SizedIconButton(
+                width: 50,
+                icon: Icons.repeat,
                 onPressed: toggleRepeat,
               ),
-              IconButton(
-                //  width: 50,
-                icon: Icon(Icons.shuffle),
+              SizedIconButton(
+                width: 50,
+                icon: Icons.shuffle,
                 onPressed: toggleShuffle,
               ),
             ],
           ),
-          /*Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               SizedIconButton(
@@ -135,7 +124,7 @@ class _SpotifyState extends State<Spotify> {
                 icon: Icons.info,
               ),
             ],
-          ),*/
+          ),
         ],
       ),
     );
@@ -256,25 +245,25 @@ class _SpotifyState extends State<Spotify> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                IconButton(
-                  //  width: 50,
-                  icon: Icon(Icons.skip_previous),
+                SizedIconButton(
+                  width: 50,
+                  icon: Icons.skip_previous,
                   onPressed: skipPrevious,
                 ),
                 playerState.isPaused
-                    ? IconButton(
-                  // width: 50,
-                  icon: Icon(Icons.play_arrow),
+                    ? SizedIconButton(
+                  width: 50,
+                  icon: Icons.play_arrow,
                   onPressed: resume,
                 )
-                    : IconButton(
-                  //  width: 50,
-                  icon: Icon(Icons.pause),
+                    : SizedIconButton(
+                  width: 50,
+                  icon: Icons.pause,
                   onPressed: pause,
                 ),
-                IconButton(
-                  //  width: 50,
-                  icon: Icon(Icons.skip_next),
+                SizedIconButton(
+                  width: 50,
+                  icon: Icons.skip_next,
                   onPressed: skipNext,
                 ),
               ],
@@ -367,6 +356,7 @@ class _SpotifyState extends State<Spotify> {
             child: Text('Not connected'),
           );
         }
+
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -436,9 +426,9 @@ class _SpotifyState extends State<Spotify> {
         _loading = true;
       });
       var result = await SpotifySdk.connectToSpotifyRemote(
-          clientId: '00062cf894414e29b5158c040fbc96b5',
-          redirectUrl: 'https://ansariacademy.com/Run-With-KT/spotify.php');
-      print("Remote ${result}");
+          clientId: "2ef7a2b450d0437987c3c4d91c040f72",
+          redirectUrl: callBackUrlSpotify
+      );
       setStatus(result
           ? 'connect to spotify successful'
           : 'connect to spotify failed');
@@ -459,17 +449,16 @@ class _SpotifyState extends State<Spotify> {
   }
 
   Future<String> getAccessToken() async {
-    print("get access token pressed");
+    print("getAccessToken ");
     try {
       var authenticationToken = await SpotifySdk.getAccessToken(
-          clientId: '00062cf894414e29b5158c040fbc96b5',
-          redirectUrl: 'https://ansariacademy.com/Run-With-KT/spotify.php',
+          clientId: "2ef7a2b450d0437987c3c4d91c040f72",
+          redirectUrl: callBackUrlSpotify,
           scope: 'app-remote-control, '
               'user-modify-playback-state, '
               'playlist-read-private, '
-              'playlist-modify-public, '
-              'user-read-currently-playing');
-      print("authenticationToken ${authenticationToken}");
+              'playlist-modify-public,user-read-currently-playing');
+      print("authenticationToken ${authenticationToken} ");
       setStatus('Got a token: $authenticationToken');
       return authenticationToken;
     } on PlatformException catch (e) {
@@ -657,7 +646,6 @@ class _SpotifyState extends State<Spotify> {
   }
 
   void setStatus(String code, {String? message}) {
-    print("Set Status is ${message}");
     var text = message ?? '';
     _logger.i('$code$text');
   }

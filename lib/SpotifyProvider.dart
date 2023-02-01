@@ -16,12 +16,17 @@ import 'package:testing/provider_utility.dart';
 
 
 // Stream<PlayerState>? playerStateStream;
-String callBackUrlSpotify = 'spotify-ios-quick-start://spotify-login-callback';
+
+
 class SpotifyProvider extends ChangeNotifier {
   bool showPlayer = false;
   bool authenticationTried = false;
   ImageUri? currentTrackImageUri;
   late Widget oldImage;
+  String clientId="2ef7a2b450d0437987c3c4d91c040f72";
+  String callBackUrlSpotify = 'spotify-ios-quick-start://spotify-login-callback';
+
+
   PlayerState playerState = PlayerState(
     null,
     1,
@@ -32,25 +37,27 @@ class SpotifyProvider extends ChangeNotifier {
   );
   Track? track;
   initSpotify() async{
+    print("Init Spotify");
     try{
       bool result = false;
       if(Platform.isAndroid || UserPreferences.spotifyToken.isEmpty){
         result = await SpotifySdk.connectToSpotifyRemote(
-
-          clientId: '00062cf894414e29b5158c040fbc96b5',
+          clientId: clientId,
           // redirectUrl: 'https://ansariacademy.com/Run-With-KT/spotify.php'
           redirectUrl: callBackUrlSpotify,
         );
+        print("Init Spotify if ${result}");
       }
       else{
-
         //00062cf894414e29b5158c040fbc96b5
         result = await SpotifySdk.connectToSpotifyRemote(
-          clientId: '00062cf894414e29b5158c040fbc96b5',
+          clientId: clientId,
           accessToken: UserPreferences.spotifyToken,
           //  redirectUrl: 'https://ansariacademy.com/Run-With-KT/spotify.php'
           redirectUrl: callBackUrlSpotify,
         );
+
+        print("Init Spotify else ${result}");
       }
 
       if(!result && !authenticationTried){
@@ -69,6 +76,7 @@ class SpotifyProvider extends ChangeNotifier {
     } on PlatformException catch (e) {
       //  initSpotify();
       print('Spotify could not be initiated');
+      showToast("Please Install Spotify App");
       print(e);
     } on MissingPluginException {
       print('error spotify');
@@ -84,8 +92,8 @@ class SpotifyProvider extends ChangeNotifier {
   Future<String> getAccessToken() async {
     try {
       var authenticationToken = await SpotifySdk.getAccessToken(
-          clientId: '00062cf894414e29b5158c040fbc96b5',
-          //   redirectUrl: 'https://ansariacademy.com/Run-With-KT/spotify.php',
+          clientId: clientId,
+          //redirectUrl: 'https://ansariacademy.com/Run-With-KT/spotify.php',
           //    redirectUrl: 'https://evam.handabots.com/',
           redirectUrl: callBackUrlSpotify,
           scope: 'app-remote-control, '
@@ -93,6 +101,7 @@ class SpotifyProvider extends ChangeNotifier {
               'playlist-read-private, '
               'playlist-modify-public, '
               'user-read-currently-playing');
+      print("autientication token is ${authenticationToken}");
       return authenticationToken;
     } on PlatformException catch (e) {
       return Future.error('$e.code: $e.message');
@@ -115,78 +124,6 @@ class SpotifyProvider extends ChangeNotifier {
       print('error spotify');
     }
   }
-
-  /*Widget _buildPlayerStateWidget() {
-    return Visibility(
-      visible: showPlayer,
-        child: StreamBuilder<PlayerState>(
-      stream: playerStateStream,
-      builder: (BuildContext context, AsyncSnapshot<PlayerState> snapshot) {
-        var track = snapshot.data?.track;
-        var playerState = snapshot.data;
-        // String totalTime = Calculations.timeFromSeconds((track!.duration/60).toInt());
-
-        if (playerState == null || track == null) {
-          // initSpotify();
-          return Center(
-            child: Container(child: Text('Player not loaded. select a playlist from spotify app'),),
-          );
-        }
-
-        return Stack(
-          children: [
-            currentTrackImageUri==track.imageUri ?
-            oldImage :
-            spotifyImageWidget(track.imageUri),
-            Padding(padding: EdgeInsets.only(top: 10),
-              child:  Column(
-                children: <Widget>[
-                  Row(
-                    children: [
-                      SizedBox(width: 20,),
-                      RunTag(name: track.name),
-                      //  Text('${track.name}', overflow: TextOverflow.ellipsis,),
-                      Spacer(),
-                      //  Text(totalTime),
-                      FutureBuilder(
-                        builder: (ctx, snapshot) {
-                          // Displaying LoadingSpinner to indicate waiting state
-                          if (!snapshot.hasData) {
-                            return Text('');
-                          }
-                          return(RunTag(name: snapshot.data.toString()));
-                        },
-                        future: Calculations.timeFromSecondsFuture(track.duration~/1000),
-                      ),
-                      SizedBox(width: 20,),
-                    ],
-                  ),
-                  SizedBox(height: 10,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      RoundIconBtn(iconData: Icons.skip_previous, onClicked: skipPrevious,),
-                      *//*IconButton(
-                     //  width: 50,
-                     icon: Icon(Icons.skip_previous),
-                     onPressed: skipPrevious,
-                   ),*//*
-                      playerState.isPaused
-                          ? RoundIconBtn(iconData: Icons.play_arrow, onClicked: resume,)
-                          : RoundIconBtn(iconData: Icons.pause, onClicked: pause,),
-                      RoundIconBtn(iconData: Icons.skip_next, onClicked: skipNext,),
-                    ],
-                  ),
-                  SizedBox(height: 10,),
-                ],
-              ),
-            )
-          ],
-        );
-      },
-    )
-    );
-  }*/
 
   Future<void> pause() async {
     try {
