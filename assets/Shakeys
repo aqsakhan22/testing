@@ -5,6 +5,11 @@
 
          https://stackoverflow.com/questions/51845559/generate-sha-1-for-flutter-react-native-android-native-app
          https://github.com/spotify/android-auth/releases
+         for IOS
+         https://developer.spotify.com/documentation/ios/quick-start/
+         https://github.com/spotify/android-sdk/tree/master/auth-sample
+         https://github.com/spotify/android-auth
+
 
 
         novusaltair@Novuss-MacBook-Air testing % keytool -alias androiddebugkey -keystore ~/.android/debug.keystore -list -v | grep SHA1
