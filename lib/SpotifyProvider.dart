@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:spotify_sdk/models/player_options.dart' as player_options;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -66,19 +67,73 @@ class SpotifyProvider extends ChangeNotifier {
           authenticationTried = true;
           initSpotify();
         });
-      } else if(result){
+      }
+      else if(result){
         showPlayer = true;
         hiveBox.put(Constants.keyShowSpotifyPlayer, true);
         refreshStream();
-      } else{
-        print('Spotify could not be initiated');
+      }
+      else{
+
+       // showToast("Please Install Spotify App");
+        print('Please Install Spotify App');
+        Fluttertoast.showToast(
+            msg: "This is Center Short Toast",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0
+        );
       }
     } on PlatformException catch (e) {
+      //type of exception
+      // AuthenticationFailedException
+      // CouldNotFindSpotifyApp
+      // NotLoggedInException
+      // OfflineModeException
+      // SpotifyConnectionTerminatedException
+      // SpotifyDisconnectedException
+      // SpotifyRemoteServiceException
+      // UnsupportedFeatureVersionException
+      // UserNotAuthorizedException
+      print("Exception is message ${e.message} code ${e.code} stacktrace ${e.details}");
+      if(e.code == "CouldNotFindSpotifyApp"){
+        print("CouldNotFindSpotifyApp");
+        Fluttertoast.showToast(
+            msg: "${e.code}",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0
+        );
+
+      }
+      if(e.code == "NotLoggedInException"){
+        print("NotLoggedInException");
+        Fluttertoast.showToast(
+            msg: "The user must go to the Spotify and log-in",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0
+        );
+
+      }
       //  initSpotify();
-      print('Spotify could not be initiated');
-      showToast("Please Install Spotify App");
+
+
+    //  showToast("Please Install Spotify App");
       print(e);
-    } on MissingPluginException {
+    }
+
+
+    on MissingPluginException {
       print('error spotify');
     }
   }

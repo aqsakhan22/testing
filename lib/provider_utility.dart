@@ -8,6 +8,7 @@ Box hiveBox = Hive.box(hiveBoxName);
 double screenWidth = MediaQuery.of(appNavigationKey.currentContext!).size.width;
 SpotifyProvider spotifyProvider = Provider.of<SpotifyProvider>(appNavigationKey.currentContext!, listen: false);
 showToast(String msg) {
+  print("showToast message is ${msg}");
   ScaffoldMessenger.of(appNavigationKey.currentContext!).showSnackBar(SnackBar(
     content: Text(msg),
   ));
