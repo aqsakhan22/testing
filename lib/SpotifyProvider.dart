@@ -23,7 +23,7 @@ class SpotifyProvider extends ChangeNotifier {
   bool authenticationTried = false;
   ImageUri? currentTrackImageUri;
   late Widget oldImage;
-  String clientId="2ef7a2b450d0437987c3c4d91c040f72";
+  String clientId="00062cf894414e29b5158c040fbc96b5";
   String callBackUrlSpotify = 'spotify-ios-quick-start://spotify-login-callback';
 
 

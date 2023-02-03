@@ -13,6 +13,10 @@ import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:testing/SpotifyProvider.dart';
 import 'package:testing/provider_utility.dart';
 
+//BQBL_SMLfnn2d6_5JdDEwVfD5wYpQ_S_HsXf2DK3_A-DMyj3TCYl_ppwuuydt16vmV2woPPjhHrTvSYK7hnda0B5-QUMQCjnBeXXw5s6QIRjNiAEYUPvRE2B6Qgn_t8o2GqVM26wApEq5shraOo87lKFUxs25dQiN50ZC9nCC_DM6zwCi5O96Z3jmCu_iR76LuKh5vMnAOv5xvhuVLhEsg
+
+//https://github.com/brim-borium/spotify_sdk/blob/main/example/lib/main.dart
+
 class Spotify extends StatefulWidget {
   const Spotify({Key? key}) : super(key: key);
 
@@ -147,6 +151,10 @@ class _SpotifyState extends State<Spotify> {
         ListView(
           padding: const EdgeInsets.all(8),
           children: [
+
+            ElevatedButton(onPressed: (){
+              getAuth();
+            }, child: Text("getAuth")),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -437,7 +445,7 @@ class _SpotifyState extends State<Spotify> {
       });
       var result = await SpotifySdk.connectToSpotifyRemote(
           clientId: '00062cf894414e29b5158c040fbc96b5',
-          redirectUrl: 'https://ansariacademy.com/Run-With-KT/spotify.php');
+          redirectUrl: 'https://ansariacademy.com/RunWith/spotify.php');
       print("Remote ${result}");
       setStatus(result
           ? 'connect to spotify successful'
@@ -458,12 +466,26 @@ class _SpotifyState extends State<Spotify> {
     }
   }
 
+  Future<void> getAuth() async{
+    var authenticationToken = await SpotifySdk.getAuthenticationToken(clientId: "00062cf894414e29b5158c040fbc96b5", redirectUrl: "https://ansariacademy.com/RunWith/spotify.php", scope:
+        "app-remote-control,user-modify-playback-state,playlist-read-private");
+    print("authenticationToken from getAuth ${authenticationToken}");
+  var  result = await SpotifySdk.connectToSpotifyRemote(
+      clientId: clientId,
+      accessToken: authenticationToken.toString(),
+      //  redirectUrl: 'https://ansariacademy.com/Run-With-KT/spotify.php'
+      redirectUrl: "https://ansariacademy.com/Run-With-KT/spotify.php",
+    );
+
+  print("result of token getAuth is ");
+  }
+
   Future<String> getAccessToken() async {
     print("get access token pressed");
     try {
       var authenticationToken = await SpotifySdk.getAccessToken(
           clientId: '00062cf894414e29b5158c040fbc96b5',
-          redirectUrl: 'https://ansariacademy.com/Run-With-KT/spotify.php',
+          redirectUrl: 'https://ansariacademy.com/RunWith/spotify.php',
           scope: 'app-remote-control, '
               'user-modify-playback-state, '
               'playlist-read-private, '
