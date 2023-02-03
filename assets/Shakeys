@@ -4,6 +4,13 @@
          SHA256: EA:D5:05:64:8C:21:B8:73:D4:56:7A:6B:20:51:EF:0D:AE:87:C8:B2:E2:93:5D:66:A1:2B:3D:C1:EB:27:7E:DF
 
          https://stackoverflow.com/questions/51845559/generate-sha-1-for-flutter-react-native-android-native-app
+         https://github.com/spotify/android-auth/releases
+         for IOS
+         https://developer.spotify.com/documentation/ios/quick-start/
+         https://github.com/spotify/android-sdk/tree/master/auth-sample
+         https://github.com/spotify/android-auth
+
+
 
         novusaltair@Novuss-MacBook-Air testing % keytool -alias androiddebugkey -keystore ~/.android/debug.keystore -list -v | grep SHA1
          Enter keystore password:  123456
