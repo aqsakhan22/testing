@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.testing">
     <!-- Provide required visibility configuration for API level 30 and above -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <queries>
         <!-- If your app checks for SMS support -->
 
@@ -73,6 +74,7 @@
                     android:scheme="https"
                     android:host="ansariacademy.com"/>
             </intent-filter>
+
 
         </activity>
         <!-- Don't delete the meta-data below.
