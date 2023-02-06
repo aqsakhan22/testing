@@ -42,6 +42,7 @@ class SpotifyProvider extends ChangeNotifier {
     try{
       bool result = false;
       if(Platform.isAndroid || UserPreferences.spotifyToken.isEmpty){
+        print("token is empty");
         result = await SpotifySdk.connectToSpotifyRemote(
           clientId: clientId,
           // redirectUrl: 'https://ansariacademy.com/Run-With-KT/spotify.php'

@@ -52,19 +52,19 @@ class _SpotifyState extends State<Spotify> {
   CrossfadeState? crossfadeState;
   late ImageUri? currentTrackImageUri;
 
-  late SpotifyProvider spotifyProvider;
+  // late SpotifyProvider spotifyProvider;
   void _handleIncomingLinks() {
     print("_handleIncomingLinks");
-  //  spotifyProvider.initSpotify();
-   //  getAccessToken();
+    //  spotifyProvider.initSpotify();
+    //  getAccessToken();
     //  }
   }
   @override
   void initState() {
     // TODO: implement initState
- WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-   _handleIncomingLinks();
- });
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _handleIncomingLinks();
+    });
 
 
     super.initState();
@@ -455,15 +455,15 @@ class _SpotifyState extends State<Spotify> {
       });
 
       var result = await SpotifySdk.connectToSpotifyRemote(
-          clientId: '00062cf894414e29b5158c040fbc96b5',
-          redirectUrl: 'https://ansariacademy.com/RunWith/spotify.php',
-          scope: 'app-remote-control, '
+        clientId: '00062cf894414e29b5158c040fbc96b5',
+        redirectUrl: 'https://ansariacademy.com/RunWith/spotify.php',
+        scope: 'app-remote-control, '
             'user-modify-playback-state, '
             'playlist-read-private, '
             'playlist-modify-public, '
             'user-read-currently-playing',
 
-           accessToken: UserPreferences.spotifyToken,
+        accessToken: UserPreferences.spotifyToken,
       );
       print("Remote ${result}");
       setStatus(result
@@ -544,18 +544,18 @@ class _SpotifyState extends State<Spotify> {
 
   Future<void> getAuth() async{
     var authenticationToken = await SpotifySdk.getAuthenticationToken(clientId: "00062cf894414e29b5158c040fbc96b5", redirectUrl: "https://accounts.spotify.com", scope:
-        "app-remote-control,"
-            "user-modify-playback-state,"
-            "playlist-read-private");
+    "app-remote-control,"
+        "user-modify-playback-state,"
+        "playlist-read-private");
     print("authenticationToken from getAuth ${authenticationToken}");
-  bool  result = await SpotifySdk.connectToSpotifyRemote(
+    bool  result = await SpotifySdk.connectToSpotifyRemote(
       clientId: clientId,
       accessToken: authenticationToken.toString(),
       //  redirectUrl: 'https://ansariacademy.com/Run-With-KT/spotify.php'
       redirectUrl: "https://ansariacademy.com/Run-With-KT/spotify.php",
     );
 
-  print("result of token getAuth is  ${result}");
+    print("result of token getAuth is  ${result}");
   }
 
   Future<String> getAccessToken() async {
@@ -570,15 +570,15 @@ class _SpotifyState extends State<Spotify> {
               'playlist-read-private, '
               'playlist-modify-public, '
               'user-read-currently-playing'
-          // scope: 'app-remote-control, '
-          //     'user-modify-playback-state, '
-          //     'playlist-read-private, '
-          //     'playlist-modify-public, '
-          //     'user-read-currently-playing'
-          //     'user-read-private user-read-email'
+        // scope: 'app-remote-control, '
+        //     'user-modify-playback-state, '
+        //     'playlist-read-private, '
+        //     'playlist-modify-public, '
+        //     'user-read-currently-playing'
+        //     'user-read-private user-read-email'
 
 
-              );
+      );
       var result = await SpotifySdk.connectToSpotifyRemote(
         clientId: '00062cf894414e29b5158c040fbc96b5',
         redirectUrl: 'https://ansariacademy.com/RunWith/spotify.php',

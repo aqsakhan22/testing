@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
@@ -33,25 +35,128 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  StreamSubscription? sub;
-  Uri? _initialUri;
-  Uri? _latestUri;
+  Uri? _initialURI;
+  Uri? _currentURI;
   Object? _err;
+  Uri? _latestUri;
+  bool _initialURILinkHandled = false;
 
+  StreamSubscription? sub;
+  Future<void> _initURIHandler() async {
+    // 1
+    if (!_initialURILinkHandled) {
+      _initialURILinkHandled = true;
+      // 2
+      Fluttertoast.showToast(
+          msg: "Invoked _initURIHandler",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white
+      );
+      try {
+        // 3
+        final initialURI = await getInitialUri();
+        // 4
+        if (initialURI != null) {
+          debugPrint("Initial URI received $initialURI");
+          if (!mounted) {
+            return;
+          }
+          setState(() {
+            _initialURI = initialURI;
+          });
+        } else {
+          debugPrint("Null Initial URI received");
+        }
+      } on PlatformException { // 5
+        debugPrint("Failed to receive initial uri");
+      } on FormatException catch (err) { // 6
+        if (!mounted) {
+          return;
+        }
+        debugPrint('Malformed Initial URI received');
+        setState(() => _err = err);
+      }
+    }
+  }
   @override
   void initState() {
     // TODO: implement initState
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _handleIncomingLinks();
-    });
+    // _handleIncomingLinks();
+    // _handleInitialUri();
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _handleIncomingLinks();
+    // });
 
     super.initState();
-  }
-  void _handleIncomingLinks() {
-    print("_handleIncomingLinks");
-    // spotifyProvider.initSpotify();
 
   }
+
+  void dispose() {
+    sub?.cancel();
+    super.dispose();
+  }
+
+  void _handleIncomingLinks() {
+    //   if (!kIsWeb) {
+    // It will handle app links while the app is already started - be it in
+    // the foreground or in the background.
+    sub = uriLinkStream.listen((Uri? uri) {
+      if (!mounted) return;
+      print('got uri: $uri');
+      setState(() {
+        _latestUri = uri;
+        _err = null;
+      });
+      String token = uri?.queryParameters['token'] ?? '';
+      showToast(token);
+      UserPreferences.spotifyToken = token;
+      spotifyProvider.initSpotify();
+    }, onError: (Object err) {
+      if (!mounted) return;
+      print('got err: $err');
+      setState(() {
+        _latestUri = null;
+        if (err is FormatException) {
+          _err = err;
+        } else {
+          _err = null;
+        }
+      });
+    });
+    //  }
+  }
+
+  bool _initialUriIsHandled = false;
+  Future<void> _handleInitialUri() async {
+    // In this example app this is an almost useless guard, but it is here to
+    // show we are not going to call getInitialUri multiple times, even if this
+    // was a weidget that will be disposed of (ex. a navigation route change).
+    if (!_initialUriIsHandled) {
+      _initialUriIsHandled = true;
+      // _showSnackBar('_handleInitialUri called');
+      try {
+        final uri = await getInitialUri();
+        if (uri == null) {
+          print('no initial uri');
+        } else {
+          print('got initial uri: $uri');
+        }
+        if (!mounted) return;
+        setState(() => _initialURI = uri);
+      } on PlatformException {
+        // Platform messages may fail but we ignore the exception
+        print('falied to get initial uri');
+      } on FormatException catch (err) {
+        if (!mounted) return;
+        print('malformed initial uri');
+        setState(() => _err = err);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
