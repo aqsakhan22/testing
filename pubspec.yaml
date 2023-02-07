@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 #7 feb 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
-#key
+#keykhjfjr
 version: 1.0.0+1
 
 environment:
