@@ -18,19 +18,11 @@ class _Videoplayer_ExState extends State<Videoplayer_Ex> {
         appBar: AppBar(
           centerTitle: true,
           title: Text('Vlc Player Example'),
-          bottom: TabBar(
-            tabs: [
-              Tab(text: 'Single'),
-              Tab(text: 'Multiple'),
-            ],
-          ),
+
         ),
-        body: TabBarView(
-          physics: NeverScrollableScrollPhysics(),
-          children: [
-            SingleTab(),
-            MultipleTab(),
-          ],
+        body:  SingleTab(
+          videoURL: "http://samples.mplayerhq.hu/MPEG-4/embedded_subs/1Video_2Audio_2SUBs_timed_text_streams_.mp4",
+
         ),
       ),
     );
