@@ -11,6 +11,8 @@ import 'package:testing/SpotifyProvider.dart';
 import 'package:testing/UserPreferences.dart';
 import 'package:testing/provider_utility.dart';
 import 'package:testing/spotify_Ex.dart';
+import 'package:testing/video_player_Ex.dart';
+import 'package:testing/vlc_git_plugin/main.dart';
 import 'package:uni_links/uni_links.dart';
 //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
 
@@ -207,7 +209,14 @@ class _HomeState extends State<Home> {
             Text("hello world"),
             ElevatedButton(onPressed: (){
               Navigator.push(context, MaterialPageRoute(builder: (context) =>Spotify() ));
-            }, child: Text("check spotify"))
+            }, child: Text("check spotify")),
+            ElevatedButton(onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>Video_player_Ex() ));
+            }, child: Text("Video_player_Ex")),
+            ElevatedButton(onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>Videoplayer_Ex() ));
+            }, child: Text("Videoplayer_Ex")),
+
           ],
         )
       ),

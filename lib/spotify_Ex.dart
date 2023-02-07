@@ -13,6 +13,7 @@ import 'package:spotify_sdk/models/player_state.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:testing/SpotifyProvider.dart';
 import 'package:testing/UserPreferences.dart';
+import 'package:testing/flutter_web_auth.dart';
 import 'package:testing/provider_utility.dart';
 
 //BQBL_SMLfnn2d6_5JdDEwVfD5wYpQ_S_HsXf2DK3_A-DMyj3TCYl_ppwuuydt16vmV2woPPjhHrTvSYK7hnda0B5-QUMQCjnBeXXw5s6QIRjNiAEYUPvRE2B6Qgn_t8o2GqVM26wApEq5shraOo87lKFUxs25dQiN50ZC9nCC_DM6zwCi5O96Z3jmCu_iR76LuKh5vMnAOv5xvhuVLhEsg
@@ -162,6 +163,9 @@ class _SpotifyState extends State<Spotify> {
           padding: const EdgeInsets.all(8),
           children: [
 
+            ElevatedButton(onPressed: (){
+           Navigator.push(context, MaterialPageRoute(builder: (context) => FlutterWebAuthEx() ));
+            }, child: Text("FlutterWebAuthEx")),
             ElevatedButton(onPressed: (){
               getAuth();
             }, child: Text("getAuth")),
