@@ -15,8 +15,11 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-#7 feb 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
-#keykhjfjr
+#7 feb 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
+#  https://accounts.spotify.com/authorize/?client_id=00062cf894414e29b5158c040fbc96b5&response_type=code&redirect_uri=
+#  https://ansariacademy.com/RunWith/spotify.phpscope=user-read-private%20user-read-email
+
+#keykhjfjrjkhh
 version: 1.0.0+1
 
 environment:
