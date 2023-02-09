@@ -18,6 +18,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 #7 feb 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
 #  https://accounts.spotify.com/authorize/?client_id=00062cf894414e29b5158c040fbc96b5&response_type=code&redirect_uri=
 #  https://ansariacademy.com/RunWith/spotify.phpscope=user-read-private%20user-read-email
+# 9 feb token
+# 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
 
 #keykhjfjrjkhh
 version: 1.0.0+1
