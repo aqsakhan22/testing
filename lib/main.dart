@@ -1,14 +1,17 @@
 import 'dart:async';
 
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hive/hive.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:testing/SpotifyProvider.dart';
 import 'package:testing/UserPreferences.dart';
+import 'package:testing/activity_recognition.dart';
 import 'package:testing/provider_utility.dart';
 import 'package:testing/spotify_Ex.dart';
 import 'package:testing/video_player_Ex.dart';
@@ -20,6 +23,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await initializePreferences();
+  askPermission();
 
   // hiveBox = await Hive.openBox(hiveBoxName);
 
@@ -188,6 +192,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -216,12 +221,60 @@ class _HomeState extends State<Home> {
             ElevatedButton(onPressed: (){
               Navigator.push(context, MaterialPageRoute(builder: (context) =>Videoplayer_Ex() ));
             }, child: Text("Videoplayer_Ex")),
+            ElevatedButton(onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>ActivityRecognitionEx() ));
+            }, child: Text("Activity")),
 
           ],
         )
       ),
     );
   }
+}
+
+askPermission() async{
+  print("Ask permission");
+
+
+  Permission.location.status.isDenied.then((value) async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.location,
+      Permission.contacts,
+      Permission.sms,
+      Permission.phone,
+      Permission.microphone,
+      Permission.camera,
+      Permission.bluetooth,
+      Permission.bluetoothConnect,
+      Permission.bluetoothScan,
+      Permission.mediaLibrary,
+      Permission.audio ,
+      Permission.activityRecognition,
+      Permission.locationWhenInUse,
+
+
+    ].request();
+    print(statuses[Permission.location]);
+    print(statuses[Permission.contacts]);
+    print(statuses[Permission.sms]);
+    print(statuses[Permission.phone]);
+    print(statuses[Permission.microphone]);
+    print(statuses[Permission.camera]);
+    print(statuses[Permission.bluetooth]);
+    print(statuses[Permission.bluetoothConnect]);
+    print(statuses[Permission.bluetoothScan]);
+    print(statuses[Permission.audio]);
+    //Navigator.pop(context);
+  });
+  // if (await Permission.camera.isPermanentlyDenied || await Permission.camera.isDenied ) {
+  //
+  //   print("Denied settings");
+  //
+  //   // The user opted to never again see the permission request dialog for this
+  //   // app. The only way to change the permission's status now is to let the
+  //   // user manually enable it in the system settings.
+  //   AppSettings.openAppSettings();
+  // }
 }
 
 
