@@ -1,12 +1,10 @@
 import 'dart:async';
 
-import 'package:app_settings/app_settings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:testing/SpotifyProvider.dart';
@@ -32,6 +30,7 @@ Future<void> main() async {
   }
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -252,7 +251,6 @@ askPermission() async{
       Permission.activityRecognition,
       Permission.locationWhenInUse,
 
-
     ].request();
     print(statuses[Permission.location]);
     print(statuses[Permission.contacts]);
@@ -276,6 +274,8 @@ askPermission() async{
   //   AppSettings.openAppSettings();
   // }
 }
+
+
 
 
 

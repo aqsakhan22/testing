@@ -21,6 +21,9 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # 9 feb token
 # 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
 # https://github.com/flutter/flutter/wiki/Upgrading-pre-1.12-Android-projects
+
+# https://github.com/flutter/flutter/wiki/Upgrading-pre-1.12-Android-projects this is for activity configuration
+
 #keykhjfjrjkhh
 version: 1.0.0+1
 
@@ -57,9 +60,10 @@ dependencies:
   flutter_web_auth: ^0.5.0
   http: ^0.13.5
   webview_flutter: ^3.0.4
-  activity_recognition_flutter: ^4.2.0
+  activity_recognition_flutter: any
   permission_handler: ^9.2.0
   app_settings: ^4.1.1
+  location: ^4.4.0
 
 dev_dependencies:
   flutter_test:

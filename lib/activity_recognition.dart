@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 
+
+
+
 class ActivityRecognitionEx extends StatefulWidget {
   @override
   _ActivityRecognitionExState createState() => new _ActivityRecognitionExState();
@@ -14,13 +17,16 @@ class ActivityRecognitionEx extends StatefulWidget {
 class _ActivityRecognitionExState extends State<ActivityRecognitionEx> {
   StreamSubscription<ActivityEvent>? activityStreamSubscription;
   List<ActivityEvent> _events = [];
+  var eventsName = "";
   ActivityRecognition activityRecognition = ActivityRecognition();
 
   @override
   void initState() {
     super.initState();
     _init();
+    print("ActivityEvent ${ActivityEvent.unknown()}");
     _events.add(ActivityEvent.unknown());
+    eventsName=ActivityEvent.unknown().toString();
   }
   @override
   void dispose() {
@@ -34,7 +40,6 @@ class _ActivityRecognitionExState extends State<ActivityRecognitionEx> {
       if (await Permission.activityRecognition.isGranted) {
         print("permission is granted");
         _startTracking();
-
       }
     }
 
@@ -44,10 +49,11 @@ class _ActivityRecognitionExState extends State<ActivityRecognitionEx> {
     }
   }
 
+
   void _startTracking() {
+
+
     print("start tracking");
-
-
      activityStreamSubscription = activityRecognition.activityStream(runForegroundService: true).listen(onData, onError: onError);
          // .activityStream(runForegroundService: true)
          // .listen(onData, onError: onError);
@@ -58,9 +64,10 @@ class _ActivityRecognitionExState extends State<ActivityRecognitionEx> {
   }
 
   void onData(ActivityEvent activityEvent) {
-    print(activityEvent.toString());
+    print("activityEvent ${activityEvent.toString()}");
     setState(() {
       _events.add(activityEvent);
+      eventsName=activityEvent.toString();
     });
   }
   Icon _activityIcon(ActivityType type) {
@@ -91,24 +98,33 @@ class _ActivityRecognitionExState extends State<ActivityRecognitionEx> {
           title:  Text('Activity Recognition Demo'),
         ),
         body:  Center(
-            child:  ListView.builder(
-                itemCount: _events.length,
-                reverse: true,
-                itemBuilder: (BuildContext context, int idx) {
-                  final activity = _events[idx];
-                  return ListTile(
+            child: Column(
+              children: [
+                Text("eventName  ${eventsName.toString().split(":")[1].split(",")[0]} "),
 
-                    leading: _activityIcon(activity.type),
-                    title: Text(
-                        '${activity.type.toString().split('.').last} (${activity.confidence}%)'),
-                    trailing: Text(activity.timeStamp
-                        .toString()
-                        .split(' ')
-                        .last
-                        .split('.')
-                        .first),
-                  );
-                })),
+                ListView.builder(
+                    itemCount: _events.length,
+                    reverse: false,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int idx) {
+                      final activity = _events[idx];
+                      return ListTile(
+
+                        title:Text("${_events[idx].type.toString().split(".")[1]}"),
+                        // Text(
+                        //     '${activity.type.toString().split('.').last} (${activity.confidence}%)'),
+                        trailing: Text(activity.timeStamp
+                            .toString()
+                            .split(' ')
+                            .last
+                            .split('.')
+                            .first),
+                      );
+                    })
+              ],
+            )
+
+        ),
       ),
     );
   }
